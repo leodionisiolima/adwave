@@ -10,3 +10,7 @@ src/database/*.sql
 # Ignorar arquivos de compilação, se houver
 dist/
 node_modules/
+
+.git-credentials
+.git-auth
+
