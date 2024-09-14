@@ -1,0 +1,12 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "zapWaveAdmin",
+  "password": "sua_senha",
+  "database": "zapWaveDB",
+  "synchronize": true,
+  "logging": false,
+  "entities": ["src/entities/*.ts"]
+}
+
