@@ -15,7 +15,6 @@ export class Campaign {
   @Column({ type: 'timestamp' })
   createdAt: Date;
 
-  @Column({ type: 'timestamp' })
   updatedAt: Date;
 }
 
