@@ -15,6 +15,10 @@ export class Campaign {
   @Column({ type: 'timestamp' })
   createdAt: Date;
 
+<<<<<<< HEAD
+=======
+  @Column({ type: 'timestamp' })
+>>>>>>> a646052 (salvando minhas alterações porque o mouse parou de funcionar)
   updatedAt: Date;
 }
 

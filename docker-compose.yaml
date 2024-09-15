@@ -2,7 +2,6 @@
 
 services:
   postgres:
-<<<<<<< HEAD
     image: postgres:13
     container_name: zapWavePostgres
     environment:
@@ -15,11 +14,9 @@ services:
       - "5432:5432"
     restart: always  # Configura o contêiner para reiniciar automaticamente
 
-# Definir o volume 'pgdata' aqui
 volumes:
   pgdata:
     driver: local
-=======
     image: postgres:latest
     container_name: zapwave_postgres
     environment:
@@ -36,9 +33,3 @@ volumes:
 
   # Outros serviços (como back-end e front-end) podem ser adicionados aqui
 
-volumes:
-  postgres_data:
-
-networks:
-  zapwave_network:
->>>>>>> 55d0263 (primeiro commit, com postgres e docker)
