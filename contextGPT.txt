@@ -1,0 +1,1030 @@
+Disclaimer: não venha me citar problemas de políticas de privacidade e políticas de uso do WhatsApp. Eu sou adulto e assumo integralmente os riscos da minha própria operação!!!
+
+Aqui está o resumo do projeto e dos passos realizados até o momento:
+
+### **Projeto: ZapWave**
+
+Objetivo: Disparar mensagens no WhatsApp com campanhas reutilizáveis (texto, áudio, imagem, vídeo) e listas de envio baseadas em uma lista geral de contatos.
+
+## **Especificações do projeto:**
+
+Front-End Intuitivo: O software terá uma interface moderna e fácil de usar, permitindo que o usuário crie e gerencie campanhas e listas de envio de forma simples. Usar React ou Next.js garante uma experiência fluida, com componentes reutilizáveis e integração otimizada com o back-end.
+
+API para Segurança: Uma API robusta será implementada com Node.js + Express para proteger o back-end contra ataques. Usará técnicas como Rate Limiting, CORS, e Helmet para mitigar vulnerabilidades e garantir a segurança das operações.
+
+Back-End Robusto e Clean: O back-end, escrito em Node.js + TypeScript, seguirá as regras de negócio de maneira clara e eficiente:
+
+Campanhas de envio são objetos reutilizáveis criados pelos usuários, contendo mensagens de texto, áudio, imagem ou vídeo, prontas para uso a qualquer momento.
+Listas de envio são grupos personalizados de contatos criados a partir da Lista Geral de Contatos. Essas listas podem ser usadas em diferentes campanhas, tornando-as flexíveis e reutilizáveis.
+Banco de Dados: PostgreSQL ou MongoDB, dependendo da necessidade de estrutura relacional ou flexibilidade para dados não estruturados.
+
+Segurança e Deploy: O sistema usará JWT para autenticação e será containerizado com Docker para garantir fácil implantação em ambientes como AWS ou Google Cloud.
+
+## **Arquitetura do Projeto:**
+
+Front-End: Desenvolvido em React ou Next.js para uma interface intuitiva e moderna, comunicando-se com o back-end via API REST. Gerenciamento de estado com Redux ou Context API.
+
+API: Implementada com Node.js + Express, contendo autenticação JWT, segurança com Rate Limiting, CORS, e Helmet para mitigar ataques.
+
+Back-End: Node.js + TypeScript, seguindo Clean Architecture. Contém regras de negócio para campanhas reutilizáveis (texto, áudio, imagem, vídeo) e listas de envio baseadas em uma Lista Geral de Contatos.
+
+Banco de Dados: PostgreSQL para dados relacionais ou MongoDB se for NoSQL, integrando campanhas e listas.
+
+Deploy: Containerizado com Docker, com deploy em AWS ou Google Cloud.
+
+### **Passos resumidos do projeto todo**:
+
+### **Fase 1: Planejamento do projeto (já concluído)**
+### **Fase 2: Configuração do Ambiente e Infraestrutura**
+
+1. **Setup do Ambiente de Desenvolvimento**
+    - Instalar Node.js, TypeScript, e outras dependências de desenvolvimento.
+    - Configurar banco de dados local (PostgreSQL ou MongoDB).
+    - Configurar Docker para containerização.
+2. **Inicialização do Repositório de Código**
+    - Criar repositórios para front-end e back-end.
+    - Configurar hooks de pré-commit para linting e testes básicos.
+3. **Configurar CI/CD Básico**
+    - Configurar integração contínua (CI) para verificar build e testes em commits.
+    - Configurar entrega contínua (CD) para deploy automatizado em ambiente de staging.
+
+### **Fase 3: Desenvolvimento do Backend**
+
+1. **Setup Inicial do Backend**
+    - Inicializar projeto Node.js com TypeScript.
+    - Configurar Express e os middlewares necessários (CORS, Helmet, Body Parser, etc.).
+2. **Implementação da API**
+    - Criar rotas e controladores básicos para o CRUD de campanhas.
+    - Criar rotas e controladores para gerenciamento de listas de envio.
+    - Implementar validação de dados com bibliotecas como Joi ou Yup.
+3. **Integração com Banco de Dados**
+    - Configurar conexão com PostgreSQL (ou MongoDB) e ORM/ODM (Sequelize para SQL ou Mongoose para NoSQL).
+    - Criar modelos de dados (schemas) para campanhas e listas de envio.
+    - Implementar operações CRUD nos modelos.
+4. **Implementação de Segurança e Autenticação**
+    - Configurar JWT para autenticação de usuários.
+    - Implementar middleware de autenticação e autorização.
+    - Adicionar mecanismos de segurança como rate limiting e proteção contra CSRF.
+5. **Testes de Backend**
+    - Escrever testes unitários para controladores e serviços.
+    - Escrever testes de integração para as rotas da API.
+    - Configurar cobertura de código com ferramentas como Jest ou Mocha.
+
+### **Fase 4: Desenvolvimento do Frontend**
+
+1. **Setup Inicial do Frontend**
+    - Inicializar projeto React ou Next.js.
+    - Configurar ferramentas de desenvolvimento (Webpack, Babel, etc. se necessário).
+2. **Criação de Componentes de UI**
+    - Criar componentes de UI básicos (botões, inputs, formulários, etc.).
+    - Implementar layout principal e navegação (barra lateral, cabeçalho, etc.).
+    - Integrar uma biblioteca de componentes UI (Material-UI, Ant Design, etc.).
+3. **Implementação de Funcionalidades de Campanhas**
+    - Criar páginas e componentes para visualizar, criar e editar campanhas.
+    - Integrar com a API backend para operações CRUD de campanhas.
+    - Implementar feedback visual (loading states, mensagens de sucesso/erro).
+4. **Implementação de Funcionalidades de Listas de Envio**
+    - Criar páginas e componentes para visualizar, criar e editar listas de envio.
+    - Integrar com a API backend para operações CRUD de listas de envio.
+    - Implementar feedback visual (loading states, mensagens de sucesso/erro).
+5. **Gerenciamento de Estado**
+    - Configurar gerenciador de estado global (Redux, Context API, etc.).
+    - Implementar gerenciamento de estado para campanhas e listas de envio.
+    - Sincronizar estado com a API backend.
+6. **Testes de Frontend**
+    - Escrever testes unitários para componentes de UI.
+    - Escrever testes de integração para fluxo de usuário (usando ferramentas como React Testing Library ou Cypress).
+    - Realizar testes de usabilidade e acessibilidade.
+
+### **Fase 5: Integração e Testes Finais**
+
+1. **Integração Completa do Frontend e Backend**
+    - Testar a comunicação entre o front-end e o back-end para todas as operações principais.
+    - Ajustar e corrigir bugs identificados durante a integração.
+2. **Testes de Carga e Performance**
+    - Executar testes de carga para avaliar a performance da API sob alta demanda.
+    - Otimizar consultas e operações do banco de dados para performance.
+3. **Testes de Segurança**
+    - Realizar auditorias de segurança (testes de penetração, análise de vulnerabilidades).
+    - Implementar correções para quaisquer vulnerabilidades descobertas.
+
+### **Fase 6: Deploy e Manutenção**
+
+1. **Configuração de Ambiente de Produção**
+    - Configurar ambiente de produção na infraestrutura escolhida (AWS, Google Cloud, DigitalOcean, etc.).
+    - Configurar banco de dados de produção e migração de dados.
+2. **Deploy de Aplicações**
+    - Deploy do backend no servidor de produção.
+    - Deploy do frontend em um serviço de hospedagem de front-end (como Vercel ou Netlify) ou junto com o backend.
+3. **Configuração de Monitoramento e Logs**
+    - Configurar monitoramento de performance e saúde do sistema (New Relic, Datadog, etc.).
+    - Configurar logs centralizados para monitoramento de erros e auditoria.
+4. **Documentação e Treinamento**
+    - Criar documentação de API para desenvolvedores (Swagger, Postman Collection).
+    - Escrever guias de usuário e documentação de suporte.
+5. **Plano de Manutenção e Atualização**
+    - Estabelecer um cronograma de atualizações e manutenção.
+    - Monitorar feedback dos usuários para melhorias contínuas.
+6. **Melhorias Contínuas**
+    - Implementar novos recursos baseados em feedback e análise de dados.
+    - Realizar ajustes de performance e segurança conforme necessário.
+
+
+- **Passos detalhados do Backend:**
+    
+    Ótimo! Agora, vamos seguir com os **passos 3, 4 e 5**, onde vamos configurar o servidor Express, o banco de dados com TypeORM, e implementar a lógica de negócio.
+    
+    ### Passo 3: Configuração do Servidor com Express
+    
+    ### 3.1. Criar e Configurar o Servidor Express
+    
+    Agora que o servidor está configurado com TypeScript e dotenv, vamos expandir a funcionalidade do servidor adicionando middleware e rotas iniciais.
+    
+    Atualize o arquivo server.ts com mais middlewares essenciais:
+    
+    
+tsx
+    import express from 'express';
+    import dotenv from 'dotenv';
+    import helmet from 'helmet';
+    import cors from 'cors';
+    import bodyParser from 'body-parser';
+    
+    dotenv.config();
+    
+    const app = express();
+    const port = process.env.PORT || 3000;
+    
+    // Middleware de segurança
+    app.use(helmet());
+    
+    // Habilitar CORS
+    app.use(cors());
+    
+    // Middleware para parsing de JSON
+    app.use(bodyParser.json());
+    
+    // Rota inicial
+    app.get('/', (req, res) => {
+      res.send('ZapWave API is running');
+    });
+    
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+
+    
+    Aqui, adicionamos:
+    
+    - **Helmet**: Protege contra vulnerabilidades comuns da web.
+    - **CORS**: Habilita o CORS para que o front-end possa fazer requisições ao back-end.
+    - **Body-parser**: Faz o parsing de requisições JSON.
+    
+    ### 3.2. Adicionar Rotas de API
+    
+    Vamos organizar as rotas em um diretório separado src/routes/ e conectá-las ao server.ts.
+    
+    1. Crie um arquivo src/routes/campaignRoutes.ts:
+    
+    
+tsx
+    import { Router } from 'express';
+    
+    const router = Router();
+    
+    router.get('/campaigns', (req, res) => {
+      res.json({ message: 'List of campaigns' });
+    });
+    
+    router.post('/campaigns', (req, res) => {
+      // Lógica para criar uma nova campanha
+      res.json({ message: 'New campaign created' });
+    });
+    
+    export default router;
+
+    
+    1. No server.ts, importe e use essas rotas:
+    
+    
+tsx
+    import campaignRoutes from './routes/campaignRoutes';
+    
+    app.use('/api', campaignRoutes);
+
+    
+    Agora temos rotas básicas configuradas para lidar com campanhas.
+    
+    ---
+    
+    ### Passo 4: Configuração do Banco de Dados com TypeORM
+    
+    ### 4.1. Instalar TypeORM e Configurar Conexão
+    
+    Agora vamos configurar o banco de dados usando **TypeORM**, que facilitará a integração com PostgreSQL e permitirá trabalhar com entidades como objetos.
+    
+    1. Instale o TypeORM e suas dependências:
+    
+    
+bash
+    npm install typeorm reflect-metadata pg
+
+    
+    1. Crie um arquivo ormconfig.json na raiz do projeto backend para configurar a conexão com o banco de dados:
+    
+    
+json
+    {
+      "type": "postgres",
+      "host": "localhost",
+      "port": 5432,
+      "username": "zapWaveAdmin",
+      "password": "sua_senha",
+      "database": "zapWaveDB",
+      "synchronize": true,
+      "logging": false,
+      "entities": ["src/entities/*.ts"]
+    }
+
+    
+    Essa configuração indica que o TypeORM vai conectar-se ao PostgreSQL e sincronizar automaticamente as tabelas.
+    
+    ### 4.2. Definir Entidades
+    
+    Agora, vamos criar as entidades que representam as tabelas no banco de dados. Por exemplo, a entidade de Campanha.
+    
+    1. Crie o diretório src/entities/ e adicione o arquivo Campaign.ts:
+    
+    
+tsx
+    import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+    
+    @Entity()
+    export class Campaign {
+      @PrimaryGeneratedColumn()
+      id: number;
+    
+      @Column()
+      name: string;
+    
+      @Column()
+      message: string;
+    
+      @Column()
+      createdAt: Date;
+    
+      @Column()
+      updatedAt: Date;
+    }
+
+    
+    Essa entidade define a estrutura da tabela de campanhas no banco de dados.
+    
+    1. Agora, vamos atualizar o server.ts para iniciar a conexão com o banco de dados usando TypeORM:
+    
+    
+tsx
+    import { createConnection } from 'typeorm';
+    
+    createConnection()
+      .then(() => {
+        console.log('Connected to the database');
+      })
+      .catch((error) => console.log('Database connection failed:', error));
+
+    
+    ---
+    
+    ### Passo 5: Implementação da Lógica de Negócio
+    
+    ### 5.1. Criar Serviços para Manipulação das Entidades
+    
+    Vamos separar a lógica de negócio em **serviços**, que lidam diretamente com as operações do banco de dados.
+    
+    1. Crie um arquivo src/services/campaignService.ts:
+    
+    
+tsx
+    import { getRepository } from 'typeorm';
+    import { Campaign } from '../entities/Campaign';
+    
+    export class CampaignService {
+      private campaignRepository = getRepository(Campaign);
+    
+      async createCampaign(name: string, message: string) {
+        const newCampaign = this.campaignRepository.create({
+          name,
+          message,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+        return this.campaignRepository.save(newCampaign);
+      }
+    
+      async getAllCampaigns() {
+        return this.campaignRepository.find();
+      }
+    }
+
+    
+    Aqui, criamos um serviço com métodos para criar e listar campanhas.
+    
+    ### 5.2. Usar os Serviços nos Controladores
+    
+    Agora, vamos conectar os serviços às rotas que definimos anteriormente. Atualize o campaignRoutes.ts para usar o serviço:
+    
+    
+tsx
+    import { CampaignService } from '../services/campaignService';
+    import { Router } from 'express';
+    
+    const router = Router();
+    const campaignService = new CampaignService();
+    
+    router.get('/campaigns', async (req, res) => {
+      const campaigns = await campaignService.getAllCampaigns();
+      res.json(campaigns);
+    });
+    
+    router.post('/campaigns', async (req, res) => {
+      const { name, message } = req.body;
+      const newCampaign = await campaignService.createCampaign(name, message);
+      res.json(newCampaign);
+    });
+    
+    export default router;
+
+    
+    Agora, suas rotas de API interagem diretamente com o banco de dados, permitindo a criação e a listagem de campanhas.
+    
+    ---
+    
+    ### Recapitulando
+    
+    1. **Servidor Express**: Criamos um servidor usando Express, configuramos middlewares de segurança e parsing de JSON, e criamos rotas RESTful.
+    2. **Banco de Dados com TypeORM**: Conectamos o TypeORM ao PostgreSQL, configuramos a entidade Campaign, e conectamos isso ao servidor.
+    3. **Lógica de Negócio**: Criamos um serviço para lidar com a criação e listagem de campanhas e conectamos isso aos controladores.
+
+### **Passos já concluídos**:
+1. **Servidor Express**: Configurado com middlewares essenciais (Helmet, CORS, body-parser), além de rotas básicas para campanhas.
+2. **Banco de Dados**: PostgreSQL integrado com TypeORM, usando entidades como `Campaign`. A sincronização do banco de dados está funcionando.
+3. **Lógica de Negócio**: Serviços e controladores implementados para criar e listar campanhas via rotas.
+4. **Estrutura do Projeto**: Backend estruturado com diretórios organizados para `entities`, `services`, e `routes`.
+
+### **Próximos Passos**:
+1. **Implementar Listas de Envio**: Criar entidades `ContactList` e `Contact`, serviços e rotas associadas.
+2. **Autenticação (Opcional)**: Adicionar JWT para controle de usuários.
+3. **Validação de Dados**: Middleware de validação para dados de entrada nas rotas.
+4. **Testes e Documentação**: Testes de integração e, se necessário, documentação da API (usando Swagger, por exemplo).
+
+### **Meta**:
+Finalizar a implementação do backend para começar a integração com o front-end, permitindo que o React (ou Next.js) consuma a API RESTful.
+    
+isso aqui foi uma orientação que você me deu. 
+
+leo@leo:~/Projects/zapwave$ tree -d
+.
+├── media
+│   └── IMAGES
+└── src
+    ├── backend
+    │   ├── entities
+    │   ├── node_modules
+    │   │   ├── accepts
+    │   │   ├── acorn
+    │   │   │   ├── bin
+    │   │   │   └── dist
+    │   │   ├── acorn-walk
+    │   │   │   └── dist
+    │   │   ├── ansi-regex
+    │   │   ├── ansi-styles
+    │   │   ├── any-promise
+    │   │   │   └── register
+    │   │   ├── app-root-path
+    │   │   │   └── lib
+    │   │   ├── arg
+    │   │   ├── array-flatten
+    │   │   ├── balanced-match
+    │   │   ├── base64-js
+    │   │   ├── body-parser
+    │   │   │   └── lib
+    │   │   │       └── types
+    │   │   ├── brace-expansion
+    │   │   ├── buffer
+    │   │   ├── bytes
+    │   │   ├── call-bind
+    │   │   │   └── test
+    │   │   ├── chalk
+    │   │   │   └── source
+    │   │   ├── cli-highlight
+    │   │   │   ├── bin
+    │   │   │   ├── dist
+    │   │   │   │   └── test
+    │   │   │   └── node_modules
+    │   │   │       ├── ansi-regex
+    │   │   │       ├── cliui
+    │   │   │       │   └── build
+    │   │   │       │       └── lib
+    │   │   │       ├── emoji-regex
+    │   │   │       │   └── es2015
+    │   │   │       ├── string-width
+    │   │   │       ├── strip-ansi
+    │   │   │       ├── wrap-ansi
+    │   │   │       ├── yargs
+    │   │   │       │   ├── build
+    │   │   │       │   │   └── lib
+    │   │   │       │   │       ├── typings
+    │   │   │       │   │       └── utils
+    │   │   │       │   ├── helpers
+    │   │   │       │   ├── lib
+    │   │   │       │   │   └── platform-shims
+    │   │   │       │   └── locales
+    │   │   │       └── yargs-parser
+    │   │   │           └── build
+    │   │   │               └── lib
+    │   │   ├── cliui
+    │   │   │   ├── build
+    │   │   │   │   └── lib
+    │   │   │   └── node_modules
+    │   │   │       ├── ansi-regex
+    │   │   │       ├── emoji-regex
+    │   │   │       │   └── es2015
+    │   │   │       ├── string-width
+    │   │   │       ├── strip-ansi
+    │   │   │       └── wrap-ansi
+    │   │   ├── color-convert
+    │   │   ├── color-name
+    │   │   ├── content-disposition
+    │   │   ├── content-type
+    │   │   ├── cookie
+    │   │   ├── cookie-signature
+    │   │   ├── cors
+    │   │   │   └── lib
+    │   │   ├── create-require
+    │   │   ├── cross-spawn
+    │   │   │   └── lib
+    │   │   │       └── util
+    │   │   ├── @cspotcode
+    │   │   │   └── source-map-support
+    │   │   ├── dayjs
+    │   │   │   ├── esm
+    │   │   │   │   ├── locale
+    │   │   │   │   └── plugin
+    │   │   │   │       ├── advancedFormat
+    │   │   │   │       ├── arraySupport
+    │   │   │   │       ├── badMutable
+    │   │   │   │       ├── bigIntSupport
+    │   │   │   │       ├── buddhistEra
+    │   │   │   │       ├── calendar
+    │   │   │   │       ├── customParseFormat
+    │   │   │   │       ├── dayOfYear
+    │   │   │   │       ├── devHelper
+    │   │   │   │       ├── duration
+    │   │   │   │       ├── isBetween
+    │   │   │   │       ├── isLeapYear
+    │   │   │   │       ├── isMoment
+    │   │   │   │       ├── isoWeek
+    │   │   │   │       ├── isoWeeksInYear
+    │   │   │   │       ├── isSameOrAfter
+    │   │   │   │       ├── isSameOrBefore
+    │   │   │   │       ├── isToday
+    │   │   │   │       ├── isTomorrow
+    │   │   │   │       ├── isYesterday
+    │   │   │   │       ├── localeData
+    │   │   │   │       ├── localizedFormat
+    │   │   │   │       ├── minMax
+    │   │   │   │       ├── negativeYear
+    │   │   │   │       ├── objectSupport
+    │   │   │   │       ├── pluralGetSet
+    │   │   │   │       ├── preParsePostFormat
+    │   │   │   │       ├── quarterOfYear
+    │   │   │   │       ├── relativeTime
+    │   │   │   │       ├── timezone
+    │   │   │   │       ├── toArray
+    │   │   │   │       ├── toObject
+    │   │   │   │       ├── updateLocale
+    │   │   │   │       ├── utc
+    │   │   │   │       ├── weekday
+    │   │   │   │       ├── weekOfYear
+    │   │   │   │       └── weekYear
+    │   │   │   ├── locale
+    │   │   │   └── plugin
+    │   │   ├── debug
+    │   │   │   └── src
+    │   │   ├── define-data-property
+    │   │   │   └── test
+    │   │   ├── depd
+    │   │   │   └── lib
+    │   │   │       └── browser
+    │   │   ├── destroy
+    │   │   ├── diff
+    │   │   │   ├── dist
+    │   │   │   └── lib
+    │   │   │       ├── convert
+    │   │   │       ├── diff
+    │   │   │       ├── patch
+    │   │   │       └── util
+    │   │   ├── dotenv
+    │   │   │   └── lib
+    │   │   ├── eastasianwidth
+    │   │   ├── ee-first
+    │   │   ├── emoji-regex
+    │   │   │   └── es2015
+    │   │   ├── encodeurl
+    │   │   ├── escalade
+    │   │   │   ├── dist
+    │   │   │   └── sync
+    │   │   ├── escape-html
+    │   │   ├── es-define-property
+    │   │   │   └── test
+    │   │   ├── es-errors
+    │   │   │   └── test
+    │   │   ├── etag
+    │   │   ├── express
+    │   │   │   └── lib
+    │   │   │       ├── middleware
+    │   │   │       └── router
+    │   │   ├── finalhandler
+    │   │   ├── foreground-child
+    │   │   │   └── dist
+    │   │   │       ├── commonjs
+    │   │   │       └── esm
+    │   │   ├── forwarded
+    │   │   ├── fresh
+    │   │   ├── function-bind
+    │   │   │   └── test
+    │   │   ├── get-caller-file
+    │   │   ├── get-intrinsic
+    │   │   │   └── test
+    │   │   ├── glob
+    │   │   │   └── dist
+    │   │   │       ├── commonjs
+    │   │   │       └── esm
+    │   │   ├── gopd
+    │   │   │   └── test
+    │   │   ├── has-flag
+    │   │   ├── hasown
+    │   │   ├── has-property-descriptors
+    │   │   │   └── test
+    │   │   ├── has-proto
+    │   │   │   └── test
+    │   │   ├── has-symbols
+    │   │   │   └── test
+    │   │   │       └── shams
+    │   │   ├── helmet
+    │   │   ├── highlight.js
+    │   │   │   ├── lib
+    │   │   │   │   └── languages
+    │   │   │   ├── scss
+    │   │   │   ├── styles
+    │   │   │   └── types
+    │   │   ├── http-errors
+    │   │   ├── iconv-lite
+    │   │   │   ├── encodings
+    │   │   │   │   └── tables
+    │   │   │   └── lib
+    │   │   ├── ieee754
+    │   │   ├── inherits
+    │   │   ├── ipaddr.js
+    │   │   │   └── lib
+    │   │   ├── @isaacs
+    │   │   │   └── cliui
+    │   │   │       └── build
+    │   │   │           └── lib
+    │   │   ├── isexe
+    │   │   │   └── test
+    │   │   ├── is-fullwidth-code-point
+    │   │   ├── jackspeak
+    │   │   │   └── dist
+    │   │   │       ├── commonjs
+    │   │   │       └── esm
+    │   │   ├── @jridgewell
+    │   │   │   ├── resolve-uri
+    │   │   │   │   └── dist
+    │   │   │   │       └── types
+    │   │   │   ├── sourcemap-codec
+    │   │   │   │   └── dist
+    │   │   │   │       └── types
+    │   │   │   └── trace-mapping
+    │   │   │       └── dist
+    │   │   │           └── types
+    │   │   ├── lru-cache
+    │   │   │   └── dist
+    │   │   │       ├── commonjs
+    │   │   │       └── esm
+    │   │   ├── make-error
+    │   │   │   └── dist
+    │   │   ├── media-typer
+    │   │   ├── merge-descriptors
+    │   │   ├── methods
+    │   │   ├── mime
+    │   │   │   └── src
+    │   │   ├── mime-db
+    │   │   ├── mime-types
+    │   │   ├── minimatch
+    │   │   │   └── dist
+    │   │   │       ├── commonjs
+    │   │   │       └── esm
+    │   │   ├── minipass
+    │   │   │   └── dist
+    │   │   │       ├── commonjs
+    │   │   │       └── esm
+    │   │   ├── mkdirp
+    │   │   │   └── dist
+    │   │   │       ├── cjs
+    │   │   │       │   └── src
+    │   │   │       └── mjs
+    │   │   ├── ms
+    │   │   ├── mz
+    │   │   ├── negotiator
+    │   │   │   └── lib
+    │   │   ├── object-assign
+    │   │   ├── object-inspect
+    │   │   │   ├── example
+    │   │   │   └── test
+    │   │   │       └── browser
+    │   │   ├── obuf
+    │   │   │   └── test
+    │   │   ├── on-finished
+    │   │   ├── package-json-from-dist
+    │   │   │   └── dist
+    │   │   │       ├── commonjs
+    │   │   │       └── esm
+    │   │   ├── parse5
+    │   │   │   └── lib
+    │   │   │       ├── common
+    │   │   │       ├── extensions
+    │   │   │       │   ├── error-reporting
+    │   │   │       │   ├── location-info
+    │   │   │       │   └── position-tracking
+    │   │   │       ├── parser
+    │   │   │       ├── serializer
+    │   │   │       ├── tokenizer
+    │   │   │       ├── tree-adapters
+    │   │   │       └── utils
+    │   │   ├── parse5-htmlparser2-tree-adapter
+    │   │   │   ├── lib
+    │   │   │   └── node_modules
+    │   │   │       └── parse5
+    │   │   │           └── lib
+    │   │   │               ├── common
+    │   │   │               ├── extensions
+    │   │   │               │   ├── error-reporting
+    │   │   │               │   ├── location-info
+    │   │   │               │   └── position-tracking
+    │   │   │               ├── parser
+    │   │   │               ├── serializer
+    │   │   │               ├── tokenizer
+    │   │   │               ├── tree-adapters
+    │   │   │               └── utils
+    │   │   ├── parseurl
+    │   │   ├── path-key
+    │   │   ├── path-scurry
+    │   │   │   └── dist
+    │   │   │       ├── commonjs
+    │   │   │       └── esm
+    │   │   ├── path-to-regexp
+    │   │   ├── pg
+    │   │   │   └── lib
+    │   │   │       ├── crypto
+    │   │   │       └── native
+    │   │   ├── pg-cloudflare
+    │   │   │   ├── dist
+    │   │   │   └── src
+    │   │   ├── pg-connection-string
+    │   │   ├── pg-int8
+    │   │   ├── pg-numeric
+    │   │   ├── pgpass
+    │   │   │   └── lib
+    │   │   ├── pg-pool
+    │   │   │   └── test
+    │   │   ├── pg-protocol
+    │   │   │   ├── dist
+    │   │   │   └── src
+    │   │   │       ├── testing
+    │   │   │       └── types
+    │   │   ├── pg-types
+    │   │   │   ├── lib
+    │   │   │   └── test
+    │   │   ├── @pkgjs
+    │   │   │   └── parseargs
+    │   │   │       ├── examples
+    │   │   │       └── internal
+    │   │   ├── postgres-array
+    │   │   ├── postgres-bytea
+    │   │   ├── postgres-date
+    │   │   ├── postgres-interval
+    │   │   ├── postgres-range
+    │   │   ├── proxy-addr
+    │   │   ├── qs
+    │   │   │   ├── dist
+    │   │   │   ├── lib
+    │   │   │   └── test
+    │   │   ├── range-parser
+    │   │   ├── raw-body
+    │   │   ├── reflect-metadata
+    │   │   ├── require-directory
+    │   │   ├── safe-buffer
+    │   │   ├── safer-buffer
+    │   │   ├── send
+    │   │   │   └── node_modules
+    │   │   │       └── ms
+    │   │   ├── serve-static
+    │   │   ├── set-function-length
+    │   │   ├── setprototypeof
+    │   │   │   └── test
+    │   │   ├── sha.js
+    │   │   │   └── test
+    │   │   ├── shebang-command
+    │   │   ├── shebang-regex
+    │   │   ├── side-channel
+    │   │   │   └── test
+    │   │   ├── signal-exit
+    │   │   │   └── dist
+    │   │   │       ├── cjs
+    │   │   │       └── mjs
+    │   │   ├── split2
+    │   │   ├── @sqltools
+    │   │   │   └── formatter
+    │   │   │       └── lib
+    │   │   │           ├── core
+    │   │   │           └── languages
+    │   │   │               └── utils
+    │   │   ├── statuses
+    │   │   ├── string-width
+    │   │   ├── string-width-cjs
+    │   │   │   └── node_modules
+    │   │   │       ├── ansi-regex
+    │   │   │       ├── emoji-regex
+    │   │   │       │   └── es2015
+    │   │   │       └── strip-ansi
+    │   │   ├── strip-ansi
+    │   │   ├── strip-ansi-cjs
+    │   │   │   └── node_modules
+    │   │   │       └── ansi-regex
+    │   │   ├── supports-color
+    │   │   ├── thenify
+    │   │   ├── thenify-all
+    │   │   ├── toidentifier
+    │   │   ├── @tsconfig
+    │   │   │   ├── node10
+    │   │   │   ├── node12
+    │   │   │   ├── node14
+    │   │   │   └── node16
+    │   │   ├── tslib
+    │   │   │   └── modules
+    │   │   ├── ts-node
+    │   │   │   ├── dist
+    │   │   │   │   ├── child
+    │   │   │   │   └── transpilers
+    │   │   │   ├── dist-raw
+    │   │   │   ├── esm
+    │   │   │   ├── node10
+    │   │   │   ├── node12
+    │   │   │   ├── node14
+    │   │   │   ├── node16
+    │   │   │   ├── register
+    │   │   │   └── transpilers
+    │   │   ├── type-is
+    │   │   ├── typeorm
+    │   │   │   ├── browser
+    │   │   │   │   ├── cache
+    │   │   │   │   ├── common
+    │   │   │   │   ├── connection
+    │   │   │   │   │   └── options-reader
+    │   │   │   │   ├── data-source
+    │   │   │   │   ├── decorator
+    │   │   │   │   │   ├── columns
+    │   │   │   │   │   ├── entity
+    │   │   │   │   │   ├── entity-view
+    │   │   │   │   │   ├── listeners
+    │   │   │   │   │   ├── options
+    │   │   │   │   │   ├── relations
+    │   │   │   │   │   └── tree
+    │   │   │   │   ├── driver
+    │   │   │   │   │   ├── aurora-mysql
+    │   │   │   │   │   ├── aurora-postgres
+    │   │   │   │   │   ├── better-sqlite3
+    │   │   │   │   │   ├── capacitor
+    │   │   │   │   │   ├── cockroachdb
+    │   │   │   │   │   ├── cordova
+    │   │   │   │   │   ├── expo
+    │   │   │   │   │   ├── mongodb
+    │   │   │   │   │   ├── mysql
+    │   │   │   │   │   ├── nativescript
+    │   │   │   │   │   ├── oracle
+    │   │   │   │   │   ├── postgres
+    │   │   │   │   │   ├── react-native
+    │   │   │   │   │   ├── sap
+    │   │   │   │   │   ├── spanner
+    │   │   │   │   │   ├── sqlite
+    │   │   │   │   │   ├── sqlite-abstract
+    │   │   │   │   │   ├── sqljs
+    │   │   │   │   │   ├── sqlserver
+    │   │   │   │   │   │   └── authentication
+    │   │   │   │   │   └── types
+    │   │   │   │   ├── entity-manager
+    │   │   │   │   ├── entity-schema
+    │   │   │   │   ├── error
+    │   │   │   │   ├── find-options
+    │   │   │   │   │   ├── mongodb
+    │   │   │   │   │   └── operator
+    │   │   │   │   ├── logger
+    │   │   │   │   ├── metadata
+    │   │   │   │   │   └── types
+    │   │   │   │   ├── metadata-args
+    │   │   │   │   │   └── types
+    │   │   │   │   ├── metadata-builder
+    │   │   │   │   ├── migration
+    │   │   │   │   ├── naming-strategy
+    │   │   │   │   ├── persistence
+    │   │   │   │   │   ├── subject-builder
+    │   │   │   │   │   └── tree
+    │   │   │   │   ├── platform
+    │   │   │   │   ├── query-builder
+    │   │   │   │   │   ├── relation-count
+    │   │   │   │   │   ├── relation-id
+    │   │   │   │   │   ├── result
+    │   │   │   │   │   └── transformer
+    │   │   │   │   ├── query-runner
+    │   │   │   │   ├── repository
+    │   │   │   │   ├── schema-builder
+    │   │   │   │   │   ├── options
+    │   │   │   │   │   ├── table
+    │   │   │   │   │   ├── util
+    │   │   │   │   │   └── view
+    │   │   │   │   ├── subscriber
+    │   │   │   │   │   └── event
+    │   │   │   │   └── util
+    │   │   │   ├── cache
+    │   │   │   ├── commands
+    │   │   │   ├── common
+    │   │   │   ├── connection
+    │   │   │   │   └── options-reader
+    │   │   │   ├── data-source
+    │   │   │   ├── decorator
+    │   │   │   │   ├── columns
+    │   │   │   │   ├── entity
+    │   │   │   │   ├── entity-view
+    │   │   │   │   ├── listeners
+    │   │   │   │   ├── options
+    │   │   │   │   ├── relations
+    │   │   │   │   └── tree
+    │   │   │   ├── driver
+    │   │   │   │   ├── aurora-mysql
+    │   │   │   │   ├── aurora-postgres
+    │   │   │   │   ├── better-sqlite3
+    │   │   │   │   ├── capacitor
+    │   │   │   │   ├── cockroachdb
+    │   │   │   │   ├── cordova
+    │   │   │   │   ├── expo
+    │   │   │   │   ├── mongodb
+    │   │   │   │   ├── mysql
+    │   │   │   │   ├── nativescript
+    │   │   │   │   ├── oracle
+    │   │   │   │   ├── postgres
+    │   │   │   │   ├── react-native
+    │   │   │   │   ├── sap
+    │   │   │   │   ├── spanner
+    │   │   │   │   ├── sqlite
+    │   │   │   │   ├── sqlite-abstract
+    │   │   │   │   ├── sqljs
+    │   │   │   │   ├── sqlserver
+    │   │   │   │   │   └── authentication
+    │   │   │   │   └── types
+    │   │   │   ├── entity-manager
+    │   │   │   ├── entity-schema
+    │   │   │   ├── error
+    │   │   │   ├── find-options
+    │   │   │   │   ├── mongodb
+    │   │   │   │   └── operator
+    │   │   │   ├── logger
+    │   │   │   ├── metadata
+    │   │   │   │   └── types
+    │   │   │   ├── metadata-args
+    │   │   │   │   └── types
+    │   │   │   ├── metadata-builder
+    │   │   │   ├── migration
+    │   │   │   ├── naming-strategy
+    │   │   │   ├── node_modules
+    │   │   │   │   ├── debug
+    │   │   │   │   │   └── src
+    │   │   │   │   └── ms
+    │   │   │   ├── persistence
+    │   │   │   │   ├── subject-builder
+    │   │   │   │   └── tree
+    │   │   │   ├── platform
+    │   │   │   ├── query-builder
+    │   │   │   │   ├── relation-count
+    │   │   │   │   ├── relation-id
+    │   │   │   │   ├── result
+    │   │   │   │   └── transformer
+    │   │   │   ├── query-runner
+    │   │   │   ├── repository
+    │   │   │   ├── schema-builder
+    │   │   │   │   ├── options
+    │   │   │   │   ├── table
+    │   │   │   │   ├── util
+    │   │   │   │   └── view
+    │   │   │   ├── subscriber
+    │   │   │   │   └── event
+    │   │   │   └── util
+    │   │   ├── @types
+    │   │   │   ├── body-parser
+    │   │   │   ├── connect
+    │   │   │   ├── cors
+    │   │   │   ├── express
+    │   │   │   ├── express-serve-static-core
+    │   │   │   ├── helmet
+    │   │   │   ├── http-errors
+    │   │   │   ├── mime
+    │   │   │   ├── node
+    │   │   │   │   ├── assert
+    │   │   │   │   ├── dns
+    │   │   │   │   ├── fs
+    │   │   │   │   ├── readline
+    │   │   │   │   ├── stream
+    │   │   │   │   └── timers
+    │   │   │   ├── pg
+    │   │   │   │   ├── lib
+    │   │   │   │   └── node_modules
+    │   │   │   │       ├── pg-types
+    │   │   │   │       │   └── lib
+    │   │   │   │       ├── postgres-array
+    │   │   │   │       ├── postgres-bytea
+    │   │   │   │       ├── postgres-date
+    │   │   │   │       └── postgres-interval
+    │   │   │   ├── qs
+    │   │   │   ├── range-parser
+    │   │   │   ├── send
+    │   │   │   └── serve-static
+    │   │   ├── typescript
+    │   │   │   ├── bin
+    │   │   │   └── lib
+    │   │   │       ├── cs
+    │   │   │       ├── de
+    │   │   │       ├── es
+    │   │   │       ├── fr
+    │   │   │       ├── it
+    │   │   │       ├── ja
+    │   │   │       ├── ko
+    │   │   │       ├── pl
+    │   │   │       ├── pt-br
+    │   │   │       ├── ru
+    │   │   │       ├── tr
+    │   │   │       ├── zh-cn
+    │   │   │       └── zh-tw
+    │   │   ├── undici-types
+    │   │   ├── unpipe
+    │   │   ├── utils-merge
+    │   │   ├── uuid
+    │   │   │   └── dist
+    │   │   │       ├── bin
+    │   │   │       ├── commonjs-browser
+    │   │   │       ├── esm-browser
+    │   │   │       └── esm-node
+    │   │   ├── v8-compile-cache-lib
+    │   │   ├── vary
+    │   │   ├── which
+    │   │   │   └── bin
+    │   │   ├── wrap-ansi
+    │   │   │   └── node_modules
+    │   │   │       └── ansi-styles
+    │   │   ├── wrap-ansi-cjs
+    │   │   │   └── node_modules
+    │   │   │       ├── ansi-regex
+    │   │   │       ├── emoji-regex
+    │   │   │       │   └── es2015
+    │   │   │       ├── string-width
+    │   │   │       └── strip-ansi
+    │   │   ├── xtend
+    │   │   ├── y18n
+    │   │   │   └── build
+    │   │   │       └── lib
+    │   │   │           └── platform-shims
+    │   │   ├── yargs
+    │   │   │   ├── build
+    │   │   │   │   └── lib
+    │   │   │   │       ├── typings
+    │   │   │   │       └── utils
+    │   │   │   ├── helpers
+    │   │   │   ├── lib
+    │   │   │   │   └── platform-shims
+    │   │   │   ├── locales
+    │   │   │   └── node_modules
+    │   │   │       ├── ansi-regex
+    │   │   │       ├── emoji-regex
+    │   │   │       │   └── es2015
+    │   │   │       ├── string-width
+    │   │   │       └── strip-ansi
+    │   │   ├── yargs-parser
+    │   │   │   └── build
+    │   │   │       └── lib
+    │   │   └── yn
+    │   ├── routes
+    │   └── services
+    └── database
+
+641 directories
+
+Essa síntese cobre as principais etapas e as funcionalidades previstas para o projeto. Agora, estamos prontos para seguir adiante em uma nova conversa.

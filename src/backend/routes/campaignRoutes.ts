@@ -1,14 +1,18 @@
+import { CampaignService } from '../services/campaignService';
 import { Router } from 'express';
 
 const router = Router();
+const campaignService = new CampaignService();
 
-router.get('/campaigns', (req, res) => {
-  res.json({ message: 'List of campaigns' });
+router.get('/campaigns', async (req, res) => {
+  const campaigns = await campaignService.getAllCampaigns();
+  res.json(campaigns);
 });
 
-router.post('/campaigns', (req, res) => {
-  // Lógica para criar uma nova campanha
-  res.json({ message: 'New campaign created' });
+router.post('/campaigns', async (req, res) => {
+  const { name, message } = req.body;
+  const newCampaign = await campaignService.createCampaign(name, message);
+  res.json(newCampaign);
 });
 
 export default router;

@@ -4,6 +4,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import campaignRoutes from './routes/campaignRoutes';
+import { createConnection } from 'typeorm';
+
 
 dotenv.config();
 
@@ -29,3 +31,10 @@ app.listen(port, () => {
 });
 
 app.use('/api', campaignRoutes);
+
+createConnection()
+  .then(() => {
+    console.log('Connected to the database');
+  })
+  .catch((error) => console.log('Database connection failed:', error));
+

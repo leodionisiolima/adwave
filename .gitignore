@@ -1,0 +1,12 @@
+#Ignorar as variáveis de ambiente do projeto, para proteger informações sensíveis
+.env
+
+# Ignorar arquivos SQL de banco de dados
+src/database/*.sql
+
+# Ignorar arquivos de logs (se houver)
+*.log
+
+# Ignorar arquivos de compilação, se houver
+dist/
+node_modules/

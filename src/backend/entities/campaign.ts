@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
+
 export class Campaign {
   @PrimaryGeneratedColumn()
   id: number;
@@ -11,10 +12,10 @@ export class Campaign {
   @Column()
   message: string;
 
-  @Column()
+  @Column({ type: 'timestamp' })
   createdAt: Date;
 
-  @Column()
+  @Column({ type: 'timestamp' })
   updatedAt: Date;
 }
 
