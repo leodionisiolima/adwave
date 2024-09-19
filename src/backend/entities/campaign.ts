@@ -1,24 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+// entities/campaign.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { User } from './user';
+import { SendingList } from './sendingList';
+import { Message } from './message';
 
 @Entity()
-
 export class Campaign {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   name: string;
 
-  @Column()
-  message: string;
+  @OneToMany(() => Message, (message) => message.campaign)
+  messages: Message[];
 
-  @Column({ type: 'timestamp' })
+  @ManyToMany(() => SendingList)
+  @JoinTable()
+  sendingLists: SendingList[];
+
+  @ManyToOne(() => User, (user) => user.campaigns)
+  user: User;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
-
-<<<<<<< HEAD
-=======
-  @Column({ type: 'timestamp' })
->>>>>>> a646052 (salvando minhas alterações porque o mouse parou de funcionar)
-  updatedAt: Date;
 }
-

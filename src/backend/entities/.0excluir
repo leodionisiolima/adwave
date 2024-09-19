@@ -1,0 +1,132 @@
+// entities/campaign.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import { User } from './user';
+import { SendingList } from './sendingList';
+
+@Entity()
+export class Campaign {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column()
+  message: string; // Pode ser texto, áudio, imagem ou vídeo
+
+  @ManyToOne(() => User, (user) => user.campaigns)
+  user: User;
+
+  @ManyToMany(() => SendingList)
+  @JoinTable()
+  sendingLists: SendingList[];
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+}
+// entities/contact.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from './user';
+
+@Entity()
+export class Contact {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column({ unique: true })
+  phoneNumber: string;
+
+  @ManyToOne(() => User, (user) => user.contacts)
+  user: User;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+}
+// entities/message.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from './user';
+import { Campaign } from './campaign';
+
+@Entity()
+export class Message {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  content: string; // Pode armazenar o texto ou o caminho do arquivo (imagem, áudio, vídeo)
+
+  @Column()
+  messageType: string; // text, image, audio, video
+
+  @ManyToOne(() => User, (user) => user.messages)
+  user: User; // Quem criou a mensagem
+
+  @ManyToOne(() => Campaign, (campaign) => campaign.messages)
+  campaign: Campaign;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+}
+
+// entities/sendingList.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { Contact } from './contact';
+import { User } from './user';
+
+@Entity()
+export class SendingList {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  name: string;
+
+  @ManyToMany(() => Contact)
+  @JoinTable()
+  contacts: Contact[];
+
+  @ManyToOne(() => User, (user) => user.sendingLists)
+  user: User;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+}
+
+// entities/user.ts
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Campaign } from './campaign';
+import { SendingList } from './sendingList';
+import { Contact } from './contact';
+
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  name: string;
+
+  @Column({ default: 'user' }) // admin or user
+  role: string;
+
+  @OneToMany(() => Campaign, (campaign) => campaign.user)
+  campaigns: Campaign[];
+
+  @OneToMany(() => SendingList, (sendingList) => sendingList.user)
+  sendingLists: SendingList[];
+
+  @OneToMany(() => Contact, (contact) => contact.user)
+  contacts: Contact[];
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+}
