@@ -1,5 +1,5 @@
-// entities/message.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsString, IsIn } from 'class-validator';
 import { User } from './user';
 import { Campaign } from './campaign';
 
@@ -9,13 +9,16 @@ export class Message {
   id: string;
 
   @Column()
-  content: string; // Pode armazenar o texto ou o caminho do arquivo (imagem, áudio, vídeo)
+  @IsNotEmpty({ message: "O conteúdo da mensagem é obrigatório." })
+  @IsString({ message: "O conteúdo deve ser uma string válida." })
+  content: string;
 
   @Column()
-  messageType: string; // text, image, audio, video
+  @IsIn(['text', 'image', 'audio', 'video'], { message: "O tipo de mensagem deve ser 'text', 'image', 'audio' ou 'video'." })
+  messageType: string;
 
   @ManyToOne(() => User, (user) => user.messages)
-  user: User; // Quem criou a mensagem
+  user: User;
 
   @ManyToOne(() => Campaign, (campaign) => campaign.messages)
   campaign: Campaign;

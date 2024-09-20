@@ -1,5 +1,5 @@
-// entities/sendingList.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { Contact } from './contact';
 import { User } from './user';
 
@@ -9,6 +9,8 @@ export class SendingList {
   id: string;
 
   @Column()
+  @IsNotEmpty({ message: "O nome da lista de envio é obrigatório." })
+  @IsString({ message: "O nome deve ser uma string válida." })
   name: string;
 
   @ManyToMany(() => Contact)

@@ -2,7 +2,7 @@ Disclaimer: não venha me citar problemas de políticas de privacidade e políti
 
 Aqui está o resumo do projeto e dos passos realizados até o momento:
 
-### **Projeto: ZapWave**
+### **Projeto: AdWave**
 
 Objetivo: Disparar mensagens no WhatsApp com campanhas reutilizáveis (texto, áudio, imagem, vídeo) e listas de envio baseadas em uma lista geral de contatos.
 
@@ -166,7 +166,7 @@ tsx
     
     // Rota inicial
     app.get('/', (req, res) => {
-      res.send('ZapWave API is running');
+      res.send('AdWave API is running');
     });
     
     app.listen(port, () => {
@@ -238,9 +238,9 @@ json
       "type": "postgres",
       "host": "localhost",
       "port": 5432,
-      "username": "zapWaveAdmin",
+      "username": "AdWaveAdmin",
       "password": "sua_senha",
-      "database": "zapWaveDB",
+      "database": "AdWaveDB",
       "synchronize": true,
       "logging": false,
       "entities": ["src/entities/*.ts"]
@@ -384,7 +384,7 @@ isso aqui foi uma orientação que você me deu.
 
 aqui está a estrutura do projeto atualmente. tirei pastas muito volumosas da exibição.
 
-leo@leo:~/Projects/zapwave$ treeZW
+leo@leo:~/Projects/AdWave$ treeZW
 .
 ├── media
 │   └── IMAGES

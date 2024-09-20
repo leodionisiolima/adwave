@@ -2,11 +2,18 @@
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
-  "username": "zapWaveAdmin",
-  "password": "sua_senha",
-  "database": "zapWaveDB",
+  "username": "adWaveAdmin", // PRECISO ALTERAR O usuário do PostgreSQL pro novo nome AdWave
+  "password": "your_password", // IDEM PRA  senha do usuário PostgreSQL
+  "database": "adWaveDB", // IDEM PRO nome do seu banco de dados
   "synchronize": true,
   "logging": false,
-  "entities": ["src/entities/*.ts"]
+  "entities": [
+    "src/backend/entities/*.ts"
+  ],
+  "migrations": [
+    "src/backend/database/migrations/*.ts"
+  ],
+  "cli": {
+    "migrationsDir": "src/backend/database/migrations"
+  }
 }
-

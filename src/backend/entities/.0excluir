@@ -1,7 +1,8 @@
 // entities/campaign.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { User } from './user';
 import { SendingList } from './sendingList';
+import { Message } from './message';
 
 @Entity()
 export class Campaign {
@@ -11,15 +12,15 @@ export class Campaign {
   @Column()
   name: string;
 
-  @Column()
-  message: string; // Pode ser texto, áudio, imagem ou vídeo
-
-  @ManyToOne(() => User, (user) => user.campaigns)
-  user: User;
+  @OneToMany(() => Message, (message) => message.campaign)
+  messages: Message[];
 
   @ManyToMany(() => SendingList)
   @JoinTable()
   sendingLists: SendingList[];
+
+  @ManyToOne(() => User, (user) => user.campaigns)
+  user: User;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
@@ -70,7 +71,6 @@ export class Message {
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }
-
 // entities/sendingList.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
 import { Contact } from './contact';
@@ -94,12 +94,12 @@ export class SendingList {
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }
-
 // entities/user.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Campaign } from './campaign';
 import { SendingList } from './sendingList';
 import { Contact } from './contact';
+import { Message } from './message';
 
 @Entity()
 export class User {
@@ -126,6 +126,9 @@ export class User {
 
   @OneToMany(() => Contact, (contact) => contact.user)
   contacts: Contact[];
+
+  @OneToMany(() => Message, (message) => message.user)
+  messages: Message[];
 
   @Column({ default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

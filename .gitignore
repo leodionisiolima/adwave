@@ -2,7 +2,7 @@
 .env
 
 # Ignorar arquivos SQL de banco de dados
-#src/database/*.sql
+src/database/*.sql
 
 # Ignorar arquivos de logs (se houver)
 *.log

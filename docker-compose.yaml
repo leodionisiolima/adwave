@@ -3,10 +3,10 @@
 services:
   postgres:
     image: postgres:13
-    container_name: zapWavePostgres
+    container_name: AdWavePostgres
     environment:
-      POSTGRES_DB: zapWaveDB
-      POSTGRES_USER: zapWaveAdmin
+      POSTGRES_DB: AdWaveDB
+      POSTGRES_USER: AdWaveAdmin
       POSTGRES_PASSWORD: 123
     volumes:
       - pgdata:/var/lib/postgresql/data
@@ -18,7 +18,7 @@ volumes:
   pgdata:
     driver: local
     image: postgres:latest
-    container_name: zapwave_postgres
+    container_name: AdWave_postgres
     environment:
         POSTGRES_USER: ${POSTGRES_USER}
         POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -28,7 +28,7 @@ volumes:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - zapwave_network
+      - AdWave_network
       
 
   # Outros serviços (como back-end e front-end) podem ser adicionados aqui
