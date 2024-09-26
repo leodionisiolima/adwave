@@ -1,0 +1,428 @@
+>>> /home/leo/Projects/adwave/src/backend/server.ts
+import 'reflect-metadata';
+import { DataSource } from 'typeorm';
+import express from 'express';
+import dotenv from 'dotenv';
+import helmet from 'helmet';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import expressSanitizer from 'express-sanitizer'; // Importando o express-sanitizer
+import campaignRoutes from './routes/campaignRoutes';
+
+dotenv.config(); // Carrega as variáveis de ambiente
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+// Configuração do DataSource para conectar ao banco de dados
+const AppDataSource = new DataSource({
+  type: 'postgres', // ou qualquer outro banco que você esteja usando (mysql, sqlite, etc.)
+  host: process.env.DB_HOST,
+  port: parseInt(process.env.DB_PORT || '5432', 10),
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  entities: ['src/entities/*.ts'], // Adapte o caminho para as entidades no seu projeto
+  synchronize: true, // Definir para `false` em produção para evitar sincronizações automáticas
+});
+
+// Middleware de segurança
+app.use(helmet());
+
+// Habilitar CORS
+app.use(cors());
+
+// Middleware para parsing de JSON
+app.use(bodyParser.json());
+
+// Middleware do express-sanitizer
+app.use(expressSanitizer()); // Adicionando o sanitizador globalmente
+
+// Rota inicial
+app.get('/', (req, res) => {
+  res.send('AdWave API is running');
+});
+
+// Rotas de campanhas
+app.use('/api', campaignRoutes);
+
+// Inicialização do servidor
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+// Conexão com o banco de dados usando DataSource
+AppDataSource.initialize()
+  .then(() => {
+    console.log('Connected to the database');
+  })
+  .catch((error) => {
+    console.error('Database connection failed:', error);
+  });
+
+
+>>> /home/leo/Projects/adwave/src/backend/services/campaignService.ts
+import { getRepository } from 'typeorm';
+import { Campaign } from '../entities/Campaign';
+
+export class CampaignService {
+  private campaignRepository = getRepository(Campaign); // Inicializa o repositório de Campaign
+
+  // Criação de uma nova campanha
+  async createCampaign(name: string, message: string) {
+    const newCampaign = this.campaignRepository.create({
+      name,
+      message,
+      createdAt: new Date(), // Define a data de criação
+      updatedAt: new Date(), // Caso use updatedAt, também pode ser necessário garantir esse campo na entidade
+    });
+    return await this.campaignRepository.save(newCampaign); // Salva a nova campanha
+  }
+
+  // Recupera todas as campanhas
+  async getAllCampaigns() {
+    return await this.campaignRepository.find(); // Retorna todas as campanhas do banco de dados
+  }
+}
+
+
+>>> /home/leo/Projects/adwave/src/backend/controllers/authController.ts
+// controllers/authController.ts
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { Request, Response } from 'express';
+import dotenv from 'dotenv';
+import { User } from '~/Projects/adwave/src/backend/entities/user'; // Ajuste conforme necessário para importar a entidade correta
+
+dotenv.config();
+
+// Função para gerar token JWT
+const generateToken = (userId: string, role: string) => {
+  return jwt.sign({ id: userId, role }, process.env.JWT_SECRET!, {
+    expiresIn: process.env.JWT_EXPIRES_IN || '1h', // Caso a variável de ambiente não esteja definida, o padrão será 1h
+  });
+};
+
+// Rota de Registro de Usuário
+export const register = async (req: Request, res: Response) => {
+  const { name, email, password, role } = req.body;
+
+  try {
+    // Verificar se o email já está registrado
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Este e-mail já está em uso' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10); // Hashing da senha
+    const user = User.create({ name, email, password: hashedPassword, role }); // Criação do usuário
+    await user.save(); // Salvar o usuário no banco de dados
+
+    const token = generateToken(user.id, user.role); // Geração do token JWT
+
+    res.status(201).json({ message: 'Usuário registrado com sucesso', token });
+  } catch (err) {
+    res.status(500).json({ message: 'Erro ao registrar o usuário', error: err.message });
+  }
+};
+
+// Rota de Login de Usuário
+export const login = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } }); // Supondo que você esteja usando TypeORM
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password); // Comparação de senha hash
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Senha incorreta' });
+    }
+
+    const token = generateToken(user.id, user.role); // Geração do token JWT
+
+    res.status(200).json({ token });
+  } catch (err) {
+    res.status(500).json({ message: 'Erro no login', error: err.message });
+  }
+};
+
+
+>>> /home/leo/Projects/adwave/src/backend/middleware/authMiddleware.ts
+// middleware/authMiddleware.ts
+import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+interface JwtPayload {
+  id: string;
+  role: string;
+}
+
+const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.status(401).json({ message: 'Token de autenticação não fornecido.' });
+  }
+
+  const accessToken = token.split(' ')[1]; // "Bearer token"
+
+  try {
+    const decoded = jwt.verify(accessToken, process.env.JWT_SECRET!) as JwtPayload;
+    req.user = decoded; // Armazena os dados do usuário no request
+    next();
+  } catch (err) {
+    return res.status(403).json({ message: 'Token inválido ou expirado.' });
+  }
+};
+
+export default authenticateToken;
+
+
+
+>>> /home/leo/Projects/adwave/src/backend/middleware/roteMiddleware.ts
+// middleware/roleMiddleware.ts
+import { Request, Response, NextFunction } from 'express';
+
+const authorizeRoles = (...roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Você não tem permissão para acessar esta rota.' });
+    }
+    next();
+  };
+};
+
+export default authorizeRoles;
+
+
+
+>>> /home/leo/Projects/adwave/src/backend/entities/campaign.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { IsNotEmpty, IsString, IsDate } from 'class-validator';
+import { User } from './user';
+import { SendingList } from './sendingList';
+import { Message } from './message';
+
+@Entity()
+export class Campaign {
+  @PrimaryGeneratedColumn('uuid') // Gera um UUID único para cada campanha
+  id: string;
+
+  @Column()
+  @IsNotEmpty({ message: "O nome da campanha é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O nome deve ser uma string válida." }) // Validação: deve ser uma string
+  name: string;
+
+  // Relacionamentos
+  @OneToMany(() => Message, (message) => message.campaign) // Relação 1-N com Message
+  messages: Message[];
+
+  @ManyToMany(() => SendingList) // Relação N-N com SendingList
+  @JoinTable() // Cria a tabela de junção para a relação ManyToMany
+  sendingLists: SendingList[];
+
+  @ManyToOne(() => User, (user) => user.campaigns) // Relação N-1 com User
+  user: User;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }) // Define o timestamp atual como valor padrão
+  @IsDate({ message: "A data de criação deve ser uma data válida." }) // Validação: deve ser uma data válida
+  createdAt: Date;
+}
+
+
+>>> /home/leo/Projects/adwave/src/backend/entities/contact.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsString, IsPhoneNumber } from 'class-validator';
+import { User } from './user';
+
+@Entity()
+export class Contact {
+  @PrimaryGeneratedColumn('uuid') // Gera um UUID único para cada contato
+  id: string;
+
+  @Column()
+  @IsNotEmpty({ message: "O nome do contato é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O nome deve ser uma string válida." }) // Validação: deve ser uma string
+  name: string;
+
+  @Column({ unique: true }) // Garante que o número de telefone seja único
+  @IsPhoneNumber('BR', { message: "O número de telefone deve ser válido." }) // Validação: deve ser um número de telefone válido no formato brasileiro
+  phoneNumber: string;
+
+  // Relacionamentos
+  @ManyToOne(() => User, (user) => user.contacts) // Relação N-1 com User
+  user: User;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Timestamp atual como valor padrão
+  createdAt: Date;
+}
+
+
+>>> /home/leo/Projects/adwave/src/backend/entities/message.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsString, IsIn } from 'class-validator';
+import { User } from './user';
+import { Campaign } from './campaign';
+
+@Entity()
+export class Message {
+  @PrimaryGeneratedColumn('uuid') // Gera um UUID único para cada mensagem
+  id: string;
+
+  @Column()
+  @IsNotEmpty({ message: "O conteúdo da mensagem é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O conteúdo deve ser uma string válida." }) // Validação: deve ser uma string
+  content: string;
+
+  @Column()
+  @IsIn(['text', 'image', 'audio', 'video'], { message: "O tipo de mensagem deve ser 'text', 'image', 'audio' ou 'video'." }) // Validação: deve ser um tipo válido
+  messageType: string;
+
+  // Relacionamentos
+  @ManyToOne(() => User, (user) => user.messages) // Relação N-1 com User
+  user: User;
+
+  @ManyToOne(() => Campaign, (campaign) => campaign.messages) // Relação N-1 com Campaign
+  campaign: Campaign;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Timestamp atual como valor padrão
+  createdAt: Date;
+}
+
+
+>>> /home/leo/Projects/adwave/src/backend/entities/sendingList.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { Contact } from './contact';
+import { User } from './user';
+
+@Entity()
+export class SendingList {
+  @PrimaryGeneratedColumn('uuid') // Gera um UUID único para cada lista de envio
+  id: string;
+
+  @Column()
+  @IsNotEmpty({ message: "O nome da lista de envio é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O nome deve ser uma string válida." }) // Validação: deve ser uma string
+  name: string;
+
+  // Relacionamentos
+  @ManyToMany(() => Contact) // Relação N-N com a entidade Contact
+  @JoinTable() // Cria a tabela de junção para a relação many-to-many
+  contacts: Contact[];
+
+  @ManyToOne(() => User, (user) => user.sendingLists) // Relação N-1 com User
+  user: User;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Timestamp atual como valor padrão
+  createdAt: Date;
+}
+
+
+>>> /home/leo/Projects/adwave/src/backend/entities/user.ts
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { IsNotEmpty, IsEmail, IsString, Length, IsIn } from 'class-validator';
+import { Campaign } from './campaign';
+import { SendingList } from './sendingList';
+import { Contact } from './contact';
+import { Message } from './message';
+
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn('uuid') // Gerador automático de UUID para o ID
+  id: string;
+
+  @Column({ unique: true }) // Garante que o email seja único
+  @IsNotEmpty({ message: "O e-mail é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsEmail({}, { message: "O e-mail deve ser válido." }) // Validação: deve ser um e-mail válido
+  email: string;
+
+  @Column()
+  @IsNotEmpty({ message: "A senha é obrigatória." }) // Validação: campo não pode ser vazio
+  @Length(6, 100, { message: "A senha deve ter no mínimo 6 caracteres." }) // Validação: tamanho entre 6 e 100 caracteres
+  password: string;
+
+  @Column()
+  @IsNotEmpty({ message: "O nome é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O nome deve ser uma string válida." }) // Validação: deve ser uma string
+  @Length(3, 50, { message: "O nome deve ter entre 3 e 50 caracteres." }) // Sugestão: limitar o tamanho do nome
+  name: string;
+
+  @Column({ default: 'user' }) // Define o valor padrão como 'user'
+  @IsIn(['user', 'admin'], { message: "O papel deve ser 'user' ou 'admin'." }) // Validação: apenas 'user' ou 'admin'
+  role: string;
+
+  // Relacionamentos
+  @OneToMany(() => Campaign, (campaign) => campaign.user)
+  campaigns: Campaign[];
+
+  @OneToMany(() => SendingList, (sendingList) => sendingList.user)
+  sendingLists: SendingList[];
+
+  @OneToMany(() => Contact, (contact) => contact.user)
+  contacts: Contact[];
+
+  @OneToMany(() => Message, (message) => message.user)
+  messages: Message[];
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Define o timestamp atual como valor padrão
+  createdAt: Date;
+}
+
+
+>>> /home/leo/Projects/adwave/src/backend/routes/campaignRoutes.ts
+import { CampaignService } from '../services/campaignService';
+import { Router } from 'express';
+import { validate } from 'class-validator';
+import { Campaign } from '../entities/Campaign';
+
+const router = Router();
+const campaignService = new CampaignService();
+
+// Rota para obter todas as campanhas
+router.get('/campaigns', async (req, res) => {
+  try {
+    const campaigns = await campaignService.getAllCampaigns();
+    res.json(campaigns); // Retorna todas as campanhas em formato JSON
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar campanhas.', error }); // Tratamento de erro
+  }
+});
+
+// Rota para criar uma nova campanha
+router.post('/campaigns', async (req, res) => {
+  const { name, message, sendDate } = req.body;
+
+  // Cria uma nova instância de Campaign e define os valores recebidos
+  const newCampaign = new Campaign();
+  newCampaign.name = name;
+  newCampaign.messages = message; // Supondo que message seja um array de mensagens ou um campo string
+  newCampaign.createdAt = new Date(sendDate); // Define a data de criação a partir do sendDate enviado pelo cliente
+
+  // Valida os dados da campanha antes de continuar
+  const errors = await validate(newCampaign);
+  if (errors.length > 0) {
+    // Retorna erros de validação se houver
+    return res.status(400).json({ errors }); // Retorna erros de validação em formato JSON
+  }
+
+  try {
+    // Cria a campanha após a validação
+    const createdCampaign = await campaignService.createCampaign(newCampaign.name, newCampaign.messages);
+    res.status(201).json(createdCampaign); // Retorna a campanha criada
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao criar campanha.', error }); // Tratamento de erro
+  }
+});
+
+export default router;
+
+

@@ -4,21 +4,22 @@ import { User } from './user';
 
 @Entity()
 export class Contact {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid') // Gera um UUID único para cada contato
   id: string;
 
   @Column()
-  @IsNotEmpty({ message: "O nome do contato é obrigatório." })
-  @IsString({ message: "O nome deve ser uma string válida." })
+  @IsNotEmpty({ message: "O nome do contato é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O nome deve ser uma string válida." }) // Validação: deve ser uma string
   name: string;
 
-  @Column({ unique: true })
-  @IsPhoneNumber('BR', { message: "O número de telefone deve ser válido." })
+  @Column({ unique: true }) // Garante que o número de telefone seja único
+  @IsPhoneNumber('BR', { message: "O número de telefone deve ser válido." }) // Validação: deve ser um número de telefone válido no formato brasileiro
   phoneNumber: string;
 
-  @ManyToOne(() => User, (user) => user.contacts)
+  // Relacionamentos
+  @ManyToOne(() => User, (user) => user.contacts) // Relação N-1 com User
   user: User;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Timestamp atual como valor padrão
   createdAt: Date;
 }

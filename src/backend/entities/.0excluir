@@ -1,101 +1,116 @@
-// entities/campaign.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { IsNotEmpty, IsString, IsDate } from 'class-validator';
 import { User } from './user';
 import { SendingList } from './sendingList';
 import { Message } from './message';
 
 @Entity()
 export class Campaign {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid') // Gera um UUID único para cada campanha
   id: string;
 
   @Column()
+  @IsNotEmpty({ message: "O nome da campanha é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O nome deve ser uma string válida." }) // Validação: deve ser uma string
   name: string;
 
-  @OneToMany(() => Message, (message) => message.campaign)
+  // Relacionamentos
+  @OneToMany(() => Message, (message) => message.campaign) // Relação 1-N com Message
   messages: Message[];
 
-  @ManyToMany(() => SendingList)
-  @JoinTable()
+  @ManyToMany(() => SendingList) // Relação N-N com SendingList
+  @JoinTable() // Cria a tabela de junção para a relação ManyToMany
   sendingLists: SendingList[];
 
-  @ManyToOne(() => User, (user) => user.campaigns)
+  @ManyToOne(() => User, (user) => user.campaigns) // Relação N-1 com User
   user: User;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }) // Define o timestamp atual como valor padrão
+  @IsDate({ message: "A data de criação deve ser uma data válida." }) // Validação: deve ser uma data válida
   createdAt: Date;
 }
-// entities/contact.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsString, IsPhoneNumber } from 'class-validator';
 import { User } from './user';
 
 @Entity()
 export class Contact {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid') // Gera um UUID único para cada contato
   id: string;
 
   @Column()
+  @IsNotEmpty({ message: "O nome do contato é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O nome deve ser uma string válida." }) // Validação: deve ser uma string
   name: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true }) // Garante que o número de telefone seja único
+  @IsPhoneNumber('BR', { message: "O número de telefone deve ser válido." }) // Validação: deve ser um número de telefone válido no formato brasileiro
   phoneNumber: string;
 
-  @ManyToOne(() => User, (user) => user.contacts)
+  // Relacionamentos
+  @ManyToOne(() => User, (user) => user.contacts) // Relação N-1 com User
   user: User;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Timestamp atual como valor padrão
   createdAt: Date;
 }
-// entities/message.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsString, IsIn } from 'class-validator';
 import { User } from './user';
 import { Campaign } from './campaign';
 
 @Entity()
 export class Message {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid') // Gera um UUID único para cada mensagem
   id: string;
 
   @Column()
-  content: string; // Pode armazenar o texto ou o caminho do arquivo (imagem, áudio, vídeo)
+  @IsNotEmpty({ message: "O conteúdo da mensagem é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O conteúdo deve ser uma string válida." }) // Validação: deve ser uma string
+  content: string;
 
   @Column()
-  messageType: string; // text, image, audio, video
+  @IsIn(['text', 'image', 'audio', 'video'], { message: "O tipo de mensagem deve ser 'text', 'image', 'audio' ou 'video'." }) // Validação: deve ser um tipo válido
+  messageType: string;
 
-  @ManyToOne(() => User, (user) => user.messages)
-  user: User; // Quem criou a mensagem
+  // Relacionamentos
+  @ManyToOne(() => User, (user) => user.messages) // Relação N-1 com User
+  user: User;
 
-  @ManyToOne(() => Campaign, (campaign) => campaign.messages)
+  @ManyToOne(() => Campaign, (campaign) => campaign.messages) // Relação N-1 com Campaign
   campaign: Campaign;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Timestamp atual como valor padrão
   createdAt: Date;
 }
-// entities/sendingList.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne } from 'typeorm';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { Contact } from './contact';
 import { User } from './user';
 
 @Entity()
 export class SendingList {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid') // Gera um UUID único para cada lista de envio
   id: string;
 
   @Column()
+  @IsNotEmpty({ message: "O nome da lista de envio é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O nome deve ser uma string válida." }) // Validação: deve ser uma string
   name: string;
 
-  @ManyToMany(() => Contact)
-  @JoinTable()
+  // Relacionamentos
+  @ManyToMany(() => Contact) // Relação N-N com a entidade Contact
+  @JoinTable() // Cria a tabela de junção para a relação many-to-many
   contacts: Contact[];
 
-  @ManyToOne(() => User, (user) => user.sendingLists)
+  @ManyToOne(() => User, (user) => user.sendingLists) // Relação N-1 com User
   user: User;
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Timestamp atual como valor padrão
   createdAt: Date;
 }
-// entities/user.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { IsNotEmpty, IsEmail, IsString, Length, IsIn } from 'class-validator';
 import { Campaign } from './campaign';
 import { SendingList } from './sendingList';
 import { Contact } from './contact';
@@ -103,21 +118,30 @@ import { Message } from './message';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid') // Gerador automático de UUID para o ID
   id: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true }) // Garante que o email seja único
+  @IsNotEmpty({ message: "O e-mail é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsEmail({}, { message: "O e-mail deve ser válido." }) // Validação: deve ser um e-mail válido
   email: string;
 
   @Column()
+  @IsNotEmpty({ message: "A senha é obrigatória." }) // Validação: campo não pode ser vazio
+  @Length(6, 100, { message: "A senha deve ter no mínimo 6 caracteres." }) // Validação: tamanho entre 6 e 100 caracteres
   password: string;
 
   @Column()
+  @IsNotEmpty({ message: "O nome é obrigatório." }) // Validação: campo não pode ser vazio
+  @IsString({ message: "O nome deve ser uma string válida." }) // Validação: deve ser uma string
+  @Length(3, 50, { message: "O nome deve ter entre 3 e 50 caracteres." }) // Sugestão: limitar o tamanho do nome
   name: string;
 
-  @Column({ default: 'user' }) // admin or user
+  @Column({ default: 'user' }) // Define o valor padrão como 'user'
+  @IsIn(['user', 'admin'], { message: "O papel deve ser 'user' ou 'admin'." }) // Validação: apenas 'user' ou 'admin'
   role: string;
 
+  // Relacionamentos
   @OneToMany(() => Campaign, (campaign) => campaign.user)
   campaigns: Campaign[];
 
@@ -130,6 +154,6 @@ export class User {
   @OneToMany(() => Message, (message) => message.user)
   messages: Message[];
 
-  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ default: () => 'CURRENT_TIMESTAMP' }) // Define o timestamp atual como valor padrão
   createdAt: Date;
 }

@@ -2,20 +2,21 @@ import { getRepository } from 'typeorm';
 import { Campaign } from '../entities/Campaign';
 
 export class CampaignService {
-  private campaignRepository = getRepository(Campaign);
+  private campaignRepository = getRepository(Campaign); // Inicializa o repositório de Campaign
 
+  // Criação de uma nova campanha
   async createCampaign(name: string, message: string) {
     const newCampaign = this.campaignRepository.create({
       name,
       message,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date(), // Define a data de criação
+      updatedAt: new Date(), // Caso use updatedAt, também pode ser necessário garantir esse campo na entidade
     });
-    return this.campaignRepository.save(newCampaign);
+    return await this.campaignRepository.save(newCampaign); // Salva a nova campanha
   }
 
+  // Recupera todas as campanhas
   async getAllCampaigns() {
-    return this.campaignRepository.find();
+    return await this.campaignRepository.find(); // Retorna todas as campanhas do banco de dados
   }
 }
-
