@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
-import { User } from '~/Projects/adwave/src/backend/entities/user'; // Ajuste conforme necessário para importar a entidade correta
+import { User } from '/home/leo/Projects/adwave/src/backend/entities/user'; // Ajuste conforme necessário para importar a entidade correta
 
 dotenv.config();
 

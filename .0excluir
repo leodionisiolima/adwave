@@ -1,0 +1,50 @@
+.
+├── contextGPT.txt
+├── docker-compose.yaml
+├── echo
+├── media
+│   └── IMAGES
+│       ├── zapWaveDBChart.png
+│       ├── zapwave-icon.png
+│       └── zapwave-icon.xcf
+├── package.json
+├── package-lock.json
+├── pegarCodigos.sh
+├── RESOURCES
+│   └── IMAGES
+│       ├── zapWaveDBChart.png
+│       ├── zapwave-icon.png
+│       └── zapwave-icon.xcf
+└── src
+    ├── backend
+    │   ├── config
+    │   ├── controllers
+    │   │   └── authController.ts
+    │   ├── db.js
+    │   ├── entities
+    │   │   ├── campaign.ts
+    │   │   ├── contact.ts
+    │   │   ├── message.ts
+    │   │   ├── sendingList.ts
+    │   │   └── user.ts
+    │   ├── mainDependencies.sh
+    │   ├── middleware
+    │   │   ├── authMiddleware.ts
+    │   │   └── roteMiddleware.ts
+    │   ├── ormconfig.json
+    │   ├── package.json
+    │   ├── package-lock.json
+    │   ├── routes
+    │   │   └── campaignRoutes.ts
+    │   ├── server.ts
+    │   ├── services
+    │   │   └── campaignService.ts
+    │   └── tsconfig.json
+    └── database
+        ├── migrations
+        ├── seeds
+        ├── zapWaveDatabaseSchema.sql
+        ├── zapWaveTestCommands.sql
+        └── zapWaveTestData.sql
+
+16 directories, 32 files

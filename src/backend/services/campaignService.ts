@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { Campaign } from '../entities/Campaign';
+import { Campaign } from '/home/leo/Projects/adwave/backend/entities/Campaign';
 
 export class CampaignService {
   private campaignRepository = getRepository(Campaign); // Inicializa o repositório de Campaign
