@@ -20,7 +20,7 @@
     │   ├── config
     │   ├── controllers
     │   │   └── authController.ts
-    │   ├── db.js
+    │   ├── db.ts
     │   ├── entities
     │   │   ├── campaign.ts
     │   │   ├── contact.ts
